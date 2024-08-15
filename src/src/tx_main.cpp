@@ -1505,7 +1505,7 @@ void loop()
 
     CRSFHandset::makeLinkStatisticsPacket(linkStatisticsFrame);
     handset->sendTelemetryToTX(linkStatisticsFrame);
-    crsfTelemToMSPOut(linkStatisticsFrame);
+    sendCRSFTelemetryToBackpack(linkStatisticsFrame);
     TLMpacketReported = now;
   }
 
@@ -1523,7 +1523,7 @@ void loop()
           // If we have a backpack
           if (TxUSB != TxBackpack)
           {
-            TxBackpack->write(CRSFinBuffer + CRSF_FRAME_NOT_COUNTED_BYTES, count);
+            sendMAVLinkTelemetryToBackpack(CRSFinBuffer);
           }
         }
       }
@@ -1531,7 +1531,7 @@ void loop()
       {
         // Send all other tlm to handset
         handset->sendTelemetryToTX(CRSFinBuffer);
-        crsfTelemToMSPOut(CRSFinBuffer);
+        sendCRSFTelemetryToBackpack(CRSFinBuffer);
       }
       TelemetryReceiver.Unlock();
   }
